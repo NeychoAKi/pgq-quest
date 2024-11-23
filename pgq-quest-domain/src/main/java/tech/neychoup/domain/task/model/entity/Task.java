@@ -2,6 +2,7 @@ package tech.neychoup.domain.task.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @description
  */
 @Data
+@ToString
 public class Task implements Serializable {
 
     private String id;

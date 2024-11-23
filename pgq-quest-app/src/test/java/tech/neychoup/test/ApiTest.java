@@ -19,10 +19,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import tech.neychoup.domain.ai.model.aggregates.AIAnswer;
-import tech.neychoup.domain.ai.model.aggregates.Module;
-import tech.neychoup.domain.ai.model.vo.Choices;
+import tech.neychoup.domain.task.adapter.port.ITaskPort;
+import tech.neychoup.domain.task.model.aggregate.Module;
 
+import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,60 +44,6 @@ public class ApiTest {
     @Test
     public void test() {
         log.info("测试完成");
-    }
-
-    @Test
-    public void test_generate_task() throws IOException {
-        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-        HttpPost post = new HttpPost(glmUrl);
-        post.addHeader("Content-Type", "application/json");
-        post.addHeader("Authorization", "Bearer " + glmKey);
-
-        ObjectMapper mapper = new ObjectMapper();
-        HashMap<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "glm-4-air");
-
-        List<Map<String, String>> messages = Stream.of(
-                new AbstractMap.SimpleEntry<>("system", "You are a professional programming mentor. Please generate learning tasks based on the following requirements."),
-                new AbstractMap.SimpleEntry<>("user", "Modularize the Solidity learning content, with each module containing subtasks. Please ensure:\n" +
-                        "1. Each module has a clear learning objective.\n" +
-                        "2. Each subtask provides task description, difficulty level, token reward, and experience reward.\n" +
-                        "3. Experience values should follow a progressive design. The higher the difficulty, the greater the reward, with a maximum level of 5.\n" +
-                        "4. Provide assignment requirements for each subtask.\n" +
-                        "5. Present a complete learning path from beginner to advanced.\n" +
-                        "6. Use the following compressed JSON format for tasks:\n" +
-                        "{\"modules\":[{\"moduleName\":\"Solidity Basics\",\"objective\":\"Master the basic syntax of Solidity and set up a development environment.\",\"tasks\":[{\"taskName\":\"Install and configure development environment\",\"description\":\"Install Node.js, Truffle, and Ganache, and complete the setup of the development environment.\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"Provide a screenshot showing the completed environment setup.\"},{\"taskName\":\"Understand Solidity data types and variables\",\"description\":\"Learn data types such as boolean, integers, strings, and arrays, as well as variable declarations and assignments.\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"Write a simple contract demonstrating the use of multiple data types.\"}]},{\"moduleName\":\"Advanced Solidity Features\",\"objective\":\"Explore advanced features such as inheritance, interfaces, and modifiers.\",\"tasks\":[{\"taskName\":\"Learn about inheritance and polymorphism\",\"description\":\"Understand how to create base and derived contracts, and grasp the concept of polymorphism.\",\"difficulty\":3,\"tokenReward\":300,\"experienceReward\":250,\"assignment\":\"Implement a contract demonstrating inheritance and polymorphism features.\"},{\"taskName\":\"Optimize contract performance\",\"description\":\"Learn techniques to optimize contract performance and reduce gas costs.\",\"difficulty\":4,\"tokenReward\":400,\"experienceReward\":350,\"assignment\":\"Optimize an existing contract and provide a comparison of gas usage before and after optimization.\"}]}]}\n" +
-                        "Make sure the response is strictly formatted as per the example above." +
-                        "注意，json不需要换行，并且不需要用代码块包裹着，只需要压缩在一起即可")
-        ).map(entry -> {
-            Map<String, String> message = new HashMap<>();
-            message.put("role", entry.getKey());
-            message.put("content", entry.getValue());
-            return message;
-        }).collect(Collectors.toList());
-
-        requestBody.put("messages", messages);
-        requestBody.put("temperature", 0);
-        requestBody.put("max_tokens", 58888);
-
-        String paramJson = mapper.writeValueAsString(requestBody);
-        post.setEntity(new StringEntity(paramJson, ContentType.APPLICATION_JSON));
-
-        CloseableHttpResponse response = httpClient.execute(post);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            String jsonStr = EntityUtils.toString(response.getEntity());
-            AIAnswer aiAnswer = JSON.parseObject(jsonStr, AIAnswer.class);
-            StringBuilder answers = new StringBuilder();
-            List<Choices> choices = aiAnswer.getChoices();
-            for (Choices choice : choices) {
-                answers.append(choice.getMessage().getContent());
-            }
-            this.parseModules(answers.toString());
-            // log.info(answers.toString());
-        } else {
-            throw new RuntimeException("Err Code is " + response.getStatusLine().getStatusCode());
-        }
     }
 
     public static void parseModules(String json) throws JsonProcessingException {
@@ -127,17 +73,18 @@ public class ApiTest {
         requestBody.put("model", "glm-4-plus");
 
         List<Map<String, String>> messages = Stream.of(
-                new AbstractMap.SimpleEntry<>("system", "You are a professional programming mentor. Please generate learning tasks based on the following requirements."),
-                new AbstractMap.SimpleEntry<>("user", "Modularize the Solidity learning content, with each module containing subtasks. Please ensure:\n" +
-                        "1. Each module has a clear learning objective.\n" +
-                        "2. Each subtask provides task description, difficulty level, token reward, and experience reward.\n" +
-                        "3. Experience values should follow a progressive design. The higher the difficulty, the greater the reward, with a maximum level of 5.\n" +
-                        "4. Provide assignment requirements for each subtask.\n" +
-                        "5. Present a complete learning path from beginner to advanced.\n" +
-                        "6. Use the following compressed JSON format for tasks:\n" +
-                        "{\"modules\":[{\"moduleName\":\"Solidity Basics\",\"objective\":\"Master the basic syntax of Solidity and set up a development environment.\",\"tasks\":[{\"taskName\":\"Install and configure development environment\",\"description\":\"Install Node.js, Truffle, and Ganache, and complete the setup of the development environment.\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"Provide a screenshot showing the completed environment setup.\"},{\"taskName\":\"Understand Solidity data types and variables\",\"description\":\"Learn data types such as boolean, integers, strings, and arrays, as well as variable declarations and assignments.\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"Write a simple contract demonstrating the use of multiple data types.\"}]},{\"moduleName\":\"Advanced Solidity Features\",\"objective\":\"Explore advanced features such as inheritance, interfaces, and modifiers.\",\"tasks\":[{\"taskName\":\"Learn about inheritance and polymorphism\",\"description\":\"Understand how to create base and derived contracts, and grasp the concept of polymorphism.\",\"difficulty\":3,\"tokenReward\":300,\"experienceReward\":250,\"assignment\":\"Implement a contract demonstrating inheritance and polymorphism features.\"},{\"taskName\":\"Optimize contract performance\",\"description\":\"Learn techniques to optimize contract performance and reduce gas costs.\",\"difficulty\":4,\"tokenReward\":400,\"experienceReward\":350,\"assignment\":\"Optimize an existing contract and provide a comparison of gas usage before and after optimization.\"}]}]}\n" +
-                        "Make sure the response is strictly formatted as per the example above." +
-                        "注意，json不需要换行，并且不需要用代码块包裹着，只需要压缩在一起即可")
+                new AbstractMap.SimpleEntry<>("system", "你是一位专业的编程导师。请根据以下要求生成学习任务："),
+                new AbstractMap.SimpleEntry<>("user",
+                        "将Solidity的学习内容模块化，每个模块包含多个子任务。请确保：\n" +
+                        "1. 每个模块有明确的学习目标。\n" +
+                        "2. 每个子任务需要提供任务描述、难度系数、代币奖励和经验值奖励。\n" +
+                        "3. 经验值奖励应遵循递进式设计，难度越高奖励越多，最高为5级。\n" +
+                        "4. 每个子任务需要提供具体的作业要求。\n" +
+                        "5. 展示从基础到高级的完整学习路径。\n" +
+                        "6. 输出结果以压缩的JSON格式呈现，内容必须保持在一行内，示例如下：\n" +
+                        "{\"modules\":[{\"moduleName\":\"Solidity Basics\",\"objective\":\"掌握Solidity的基础语法并设置开发环境。\",\"tasks\":[{\"taskName\":\"安装和配置开发环境\",\"description\":\"安装Node.js、Truffle和Ganache，完成开发环境的配置。\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"提供环境配置完成的截图作为作业。\"},{\"taskName\":\"理解Solidity数据类型和变量\",\"description\":\"学习布尔型、整型、字符串、数组等数据类型，以及变量的声明与赋值。\",\"difficulty\":1,\"tokenReward\":100,\"experienceReward\":50,\"assignment\":\"编写一个简单的合约，展示多种数据类型的使用。\"}]},{\"moduleName\":\"高级Solidity特性\",\"objective\":\"探索继承、接口和修饰符等高级特性。\",\"tasks\":[{\"taskName\":\"学习继承和多态\",\"description\":\"理解如何创建基类和派生类，掌握多态的概念。\",\"difficulty\":3,\"tokenReward\":300,\"experienceReward\":250,\"assignment\":\"实现一个展示继承和多态特性的合约。\"},{\"taskName\":\"优化合约性能\",\"description\":\"学习优化合约性能并减少Gas费用的技巧。\",\"difficulty\":4,\"tokenReward\":400,\"experienceReward\":350,\"assignment\":\"优化一个已有的合约，并对比优化前后的Gas使用情况。\"}]}]}\n" +
+                        "注意：不要使用任何代码块标记（例如```json```），直接输出纯文本JSON格式，不要有换行或多余的符号。"
+                )
         ).map(entry -> {
             Map<String, String> message = new HashMap<>();
             message.put("role", entry.getKey());
@@ -171,12 +118,22 @@ public class ApiTest {
                     }
                 }
                 String completeJson = jsonBuilder.toString();
-                parseModules(completeJson); // Parse the complete JSON
+                String cleanJson = completeJson.replaceAll("```json", "").replaceAll("```", "").trim();
+                parseModules(cleanJson); // Parse the complete JSON
             }
         } else {
             throw new RuntimeException("Err Code is " + response.getStatusLine().getStatusCode());
         }
     }
 
+    @Resource
+    private ITaskPort taskPort;
 
+    @Test
+    public void test_taskPort() {
+        List<Module> moduleList = taskPort.generateLearningTasks("Solidity");
+        for (Module module : moduleList) {
+            log.info(module.toString());
+        }
+    }
 }

@@ -1,7 +1,8 @@
-package tech.neychoup.domain.ai.model.aggregates;
+package tech.neychoup.domain.task.model.aggregate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.ToString;
 import tech.neychoup.domain.task.model.entity.Task;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.List;
  * @description
  */
 @Data
+@ToString
 public class Module implements Serializable {
 
     @JsonProperty("moduleName")
