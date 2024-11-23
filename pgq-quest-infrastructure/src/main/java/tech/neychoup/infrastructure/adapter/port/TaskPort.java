@@ -37,12 +37,12 @@ public class TaskPort implements ITaskPort {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Module> generateLearningTasks(String topic) {
+    public List<Module> generateLearningTasks(String skill) {
         try {
             // 1. 构建请求数据
             GLMCompletionRequestDTO requestDTO = new GLMCompletionRequestDTO();
             requestDTO.setModel(apiModel);
-            requestDTO.setMessages(buildRequestPayload(topic));
+            requestDTO.setMessages(buildRequestPayload(skill));
             requestDTO.setTemperatures(0);
             requestDTO.setStream(false);
 
@@ -71,7 +71,7 @@ public class TaskPort implements ITaskPort {
 
     @Override
     public Boolean verifyTaskFinished(Task task, String content) throws IOException {
-        // Task(id=null, skillId=null, taskName=优化合约性能, description=学习优化合约性能并减少Gas费用的技巧。, difficulty=4, tokenReward=400, experienceReward=350, assignment=优化一个已有的合约，并对比优化前后的Gas使用情况。)
+        // TaskPO(id=null, skillId=null, taskName=优化合约性能, description=学习优化合约性能并减少Gas费用的技巧。, difficulty=4, tokenReward=400, experienceReward=350, assignment=优化一个已有的合约，并对比优化前后的Gas使用情况。)
         GLMCompletionRequestDTO requestDTO = new GLMCompletionRequestDTO();
         requestDTO.setModel(apiModel);
         requestDTO.setMessages(buildVerificationPayload(task, content));
@@ -99,11 +99,11 @@ public class TaskPort implements ITaskPort {
         return score >= 90;
     }
 
-    private List<Map<String, String>> buildRequestPayload(String topic) {
+    private List<Map<String, String>> buildRequestPayload(String skill) {
         List<Map<String, String>> messages = Stream.of(
-                new AbstractMap.SimpleEntry<>("system", "你是一位专业的" + topic + "导师。请根据以下要求生成学习任务："),
+                new AbstractMap.SimpleEntry<>("system", "你是一位专业的" + skill + "导师。请根据以下要求生成学习任务："),
                 new AbstractMap.SimpleEntry<>("user",
-                        "将" + topic + "的学习内容模块化，每个模块包含多个子任务。请确保：\n" +
+                        "将" + skill + "的学习内容模块化，每个模块包含多个子任务。请确保：\n" +
                                 "1. 每个模块有明确的学习目标。\n" +
                                 "2. 每个子任务需要提供任务描述、难度系数、代币奖励和经验值奖励。\n" +
                                 "3. 经验值奖励应遵循递进式设计，难度越高奖励越多，最高为5级。\n" +

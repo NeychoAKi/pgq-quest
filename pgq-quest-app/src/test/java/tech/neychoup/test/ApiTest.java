@@ -1,6 +1,5 @@
 package tech.neychoup.test;
 
-import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -13,7 +12,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,8 +140,8 @@ public class ApiTest {
     public void test_taskPort_verify_Tasks() {
         // 模拟任务
         Task task = new Task();
-        task.setId("1");
-        task.setSkillId(101L);
+        task.setId(1L);
+        task.setSkillId("101");
         task.setTaskName("优化合约性能");
         task.setDescription("学习优化合约性能并减少Gas费用的技巧。");
         task.setDifficulty(4L);

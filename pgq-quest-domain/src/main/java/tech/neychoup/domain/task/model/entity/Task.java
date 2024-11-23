@@ -16,8 +16,7 @@ import java.io.Serializable;
 @ToString
 public class Task implements Serializable {
 
-    private String id;
-    private Long skillId;
+    private Long id;
     @JsonProperty("taskName")
     private String taskName;
     @JsonProperty("description")

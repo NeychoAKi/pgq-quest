@@ -16,10 +16,10 @@ public interface ITaskPort {
 
     /**
      * 生成成长式任务
-     * @param topic 主题
+     * @param skill 技能主题
      * @return 按模块划分的任务
      */
-    List<Module> generateLearningTasks(String topic);
+    List<Module> generateLearningTasks(String skill);
 
 
     Boolean verifyTaskFinished(Task task, String content) throws IOException;
