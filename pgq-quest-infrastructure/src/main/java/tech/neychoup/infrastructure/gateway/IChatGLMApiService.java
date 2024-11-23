@@ -3,7 +3,6 @@ package tech.neychoup.infrastructure.gateway;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 import tech.neychoup.infrastructure.gateway.dto.AIAnswerDTO;
 import tech.neychoup.infrastructure.gateway.dto.GLMCompletionRequestDTO;
 

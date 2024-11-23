@@ -1,7 +1,9 @@
 package tech.neychoup.domain.task.adapter.port;
 
 import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.entity.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,5 +22,5 @@ public interface ITaskPort {
     List<Module> generateLearningTasks(String topic);
 
 
-    Boolean verifyTaskFinished(String content);
+    Boolean verifyTaskFinished(Task task, String content) throws IOException;
 }

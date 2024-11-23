@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import tech.neychoup.domain.task.adapter.port.ITaskPort;
 import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.entity.Task;
 import tech.neychoup.infrastructure.gateway.IChatGLMApiService;
 import tech.neychoup.infrastructure.gateway.dto.AIAnswerDTO;
 import tech.neychoup.infrastructure.gateway.dto.GLMCompletionRequestDTO;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,17 +50,19 @@ public class TaskPort implements ITaskPort {
                     requestDTO
             );
 
+            // 2. 执行AI生成任务
             AIAnswerDTO resp = call.execute().body();
             if (resp == null || resp.getChoices().isEmpty()) {
                 throw new RuntimeException("Empty response from ChatGLM");
             }
 
-            // 拼接模型返回内容
+            // 3. 拼接模型返回内容
             StringBuilder answers = new StringBuilder();
             for (AIAnswerDTO.ChoiceDTO choice : resp.getChoices()) {
                 answers.append(choice.getMessage().getContent());
             }
 
+            // 4. 返回构建好的Module
             return parseModules(answers.toString());
         } catch (Exception e) {
             throw new RuntimeException("Failed to call ChatGLM", e);
@@ -66,8 +70,33 @@ public class TaskPort implements ITaskPort {
     }
 
     @Override
-    public Boolean verifyTaskFinished(String content) {
-        return null;
+    public Boolean verifyTaskFinished(Task task, String content) throws IOException {
+        // Task(id=null, skillId=null, taskName=优化合约性能, description=学习优化合约性能并减少Gas费用的技巧。, difficulty=4, tokenReward=400, experienceReward=350, assignment=优化一个已有的合约，并对比优化前后的Gas使用情况。)
+        GLMCompletionRequestDTO requestDTO = new GLMCompletionRequestDTO();
+        requestDTO.setModel(apiModel);
+        requestDTO.setMessages(buildVerificationPayload(task, content));
+        requestDTO.setTemperatures(0);
+        requestDTO.setStream(false);
+
+        Call<AIAnswerDTO> call = chatGLMApiService.generateCompletion(requestDTO);
+        AIAnswerDTO resp = call.execute().body();
+
+        if (resp == null || resp.getChoices().isEmpty()) {
+            throw new RuntimeException("Empty response from ChatGLM for verification");
+        }
+
+        // 拼接模型返回内容
+        StringBuilder answers = new StringBuilder();
+        for (AIAnswerDTO.ChoiceDTO choice : resp.getChoices()) {
+            answers.append(choice.getMessage().getContent());
+        }
+
+        // 解析返回的 JSON 格式审核结果
+        JsonNode resultNode = objectMapper.readTree(getCleanJson(answers.toString()));
+        int score = resultNode.get("score").asInt();
+        String feedback = resultNode.get("feedback").asText();
+
+        return score >= 90;
     }
 
     private List<Map<String, String>> buildRequestPayload(String topic) {
@@ -94,14 +123,49 @@ public class TaskPort implements ITaskPort {
         return messages;
     }
 
+    /**
+     * 构建AI接口请求内容（审查任务）
+     * @param task 任务
+     * @param content 用户提交作业内容
+     * @return
+     */
+    private List<Map<String, String>> buildVerificationPayload(Task task, String content) {
+        List<Map<String, String>> messages = Stream.of(
+                new AbstractMap.SimpleEntry<>("system", "你是一位专业的任务审核员。请根据以下要求审核用户提交的作业："),
+                new AbstractMap.SimpleEntry<>("user",
+                        "任务描述：" + task.getDescription() + "\n" +
+                                "作业要求：" + task.getAssignment() + "\n" +
+                                "用户提交内容：" + content + "\n" +
+                                "请根据以下规则进行审核：\n" +
+                                "1. 审核用户的提交内容是否符合作业要求。\n" +
+                                "2. 提供完成度评分，满分100分。\n" +
+                                "3. 如果未完成或部分完成，请具体说明用户未满足的部分。\n" +
+                                "输出格式如下：\n" +
+                                "{\"score\":分数,\"feedback\":\"具体反馈内容\"}\n" +
+                                "确保输出格式正确，且内容清晰准确。"
+                )
+        ).map(entry -> {
+            Map<String, String> message = new HashMap<>();
+            message.put("role", entry.getKey());
+            message.put("content", entry.getValue());
+            return message;
+        }).collect(Collectors.toList());
+
+        return messages;
+    }
+
     private List<Module> parseModules(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        String cleanJson = json.replaceAll("```json", "").replaceAll("```", "").trim();
+        String cleanJson = getCleanJson(json);
 
         JsonNode rootNode = mapper.readTree(cleanJson);
         JsonNode modulesNode = rootNode.get("modules");
         List<Module> moduleList = mapper.convertValue(modulesNode, new TypeReference<List<Module>>() {
         });
         return moduleList;
+    }
+
+    private String getCleanJson(String json) {
+        return json.replaceAll("```json", "").replaceAll("```", "").trim();
     }
 }
