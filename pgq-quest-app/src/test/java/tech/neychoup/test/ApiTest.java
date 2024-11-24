@@ -18,7 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import tech.neychoup.domain.task.adapter.port.ITaskPort;
-import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.aggregate.TaskModule;
+import tech.neychoup.domain.task.model.aggregate.TaskCompletion;
 import tech.neychoup.domain.task.model.entity.Task;
 
 import javax.annotation.Resource;
@@ -52,10 +53,10 @@ public class ApiTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(json);
         JsonNode modulesNode = rootNode.get("modules");
-        List<Module> moduleList = mapper.convertValue(modulesNode, new TypeReference<List<Module>>() {
+        List<TaskModule> taskModuleList = mapper.convertValue(modulesNode, new TypeReference<List<TaskModule>>() {
         });
-        for (Module module : moduleList) {
-            log.info(module.toString());
+        for (TaskModule taskModule : taskModuleList) {
+            log.info(taskModule.toString());
         }
     }
 
@@ -130,9 +131,9 @@ public class ApiTest {
 
     @Test
     public void test_taskPort_generate_Tasks() {
-        List<Module> moduleList = taskPort.generateLearningTasks("Solidity");
-        for (Module module : moduleList) {
-            log.info(module.toString());
+        List<TaskModule> taskModuleList = taskPort.generateLearningTasks("Solidity");
+        for (TaskModule taskModule : taskModuleList) {
+            log.info(taskModule.toString());
         }
     }
 
@@ -141,7 +142,6 @@ public class ApiTest {
         // 模拟任务
         Task task = new Task();
         task.setId(1L);
-        task.setSkillId("101");
         task.setTaskName("优化合约性能");
         task.setDescription("学习优化合约性能并减少Gas费用的技巧。");
         task.setDifficulty(4L);
@@ -192,15 +192,15 @@ public class ApiTest {
                 "                    1. 原合约的 `calculateSum` 函数在每次调用时，需要遍历整个数组，消耗 O(n) 的 Gas。\n" +
                 "                    2. 优化后，`calculateSum` 直接返回缓存的 `totalSum`，Gas 消耗为 O(1)。\n" +
                 "                    3. 测试对比显示，优化后的 `calculateSum` 函数的 Gas 消耗减少了约 80%。";
-
-        Boolean isFinished = null;
+        TaskCompletion taskCompletion;
         try {
-            isFinished = taskPort.verifyTaskFinished(task, content);
+            taskCompletion = taskPort.verifyTaskFinished(task, content);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         // 输出验证结果
-        log.info("是否完成任务：{}", isFinished);
+        log.info("是否完成任务：{}", taskCompletion);
     }
 }

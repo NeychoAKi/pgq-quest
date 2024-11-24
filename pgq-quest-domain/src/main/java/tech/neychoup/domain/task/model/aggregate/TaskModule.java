@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @ToString
-public class Module implements Serializable {
+public class TaskModule implements Serializable {
 
     @JsonProperty("moduleName")
     private String moduleName;

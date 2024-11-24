@@ -1,6 +1,8 @@
 package tech.neychoup.domain.task.service;
 
-import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.aggregate.TaskModule;
+import tech.neychoup.domain.task.model.aggregate.TaskCompletion;
+import tech.neychoup.domain.task.model.entity.Task;
 
 import java.util.List;
 
@@ -12,5 +14,7 @@ import java.util.List;
  */
 public interface ITaskService {
 
-    void saveGeneratedTask(List<Module> moduleList);
+    List<TaskModule> generateTask(String skill);
+    TaskCompletion verifyTaskAssignment(Long taskId, String textContent, String imageUrl);
+    List<TaskModule> queryModularTask(Long skillId);
 }

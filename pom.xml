@@ -7,14 +7,14 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>pgq-quest-api</module>
-        <module>pgq-quest-app</module>
-        <module>pgq-quest-domain</module>
-        <module>pgq-quest-trigger</module>
-        <module>pgq-quest-infrastructure</module>
-        <module>pgq-quest-types</module>
-    </modules>
+    <taskModules>
+        <taskModule>pgq-quest-api</taskModule>
+        <taskModule>pgq-quest-app</taskModule>
+        <taskModule>pgq-quest-domain</taskModule>
+        <taskModule>pgq-quest-trigger</taskModule>
+        <taskModule>pgq-quest-infrastructure</taskModule>
+        <taskModule>pgq-quest-types</taskModule>
+    </taskModules>
 
     <repositories>
         <repository>

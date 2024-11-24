@@ -1,6 +1,7 @@
 package tech.neychoup.domain.task.adapter.port;
 
-import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.aggregate.TaskModule;
+import tech.neychoup.domain.task.model.aggregate.TaskCompletion;
 import tech.neychoup.domain.task.model.entity.Task;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ public interface ITaskPort {
      * @param skill 技能主题
      * @return 按模块划分的任务
      */
-    List<Module> generateLearningTasks(String skill);
+    List<TaskModule> generateLearningTasks(String skill);
 
 
-    Boolean verifyTaskFinished(Task task, String content) throws IOException;
+    TaskCompletion verifyTaskFinished(Task task, String content) throws IOException;
 }

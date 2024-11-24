@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tech.neychoup.infrastructure.dao.IModuleDao">
 
-    <resultMap id="CaseMap" type="tech.neychoup.infrastructure.dao.po.ModulePO">
+    <resultMap id="ModuleMap" type="tech.neychoup.infrastructure.dao.po.ModulePO">
         <id column="id" property="id"/>
         <result column="skill_id" property="skillId"/>
         <result column="module_name" property="moduleName"/>
@@ -12,7 +12,7 @@
     </resultMap>
 
     <insert id="insertModule" parameterType="tech.neychoup.infrastructure.dao.po.ModulePO">
-        insert into module (skill_id,
+        insert into taskModule (skill_id,
                             module_name,
                             objective,
                             create_time,
@@ -21,21 +21,27 @@
     </insert>
 
     <insert id="insertModules" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO module (
+        INSERT INTO taskModule (
         skill_id,
         module_name,
         objective,
         create_time,
         update_time
         ) VALUES
-        <foreach collection="list" item="module" separator=",">
+        <foreach collection="list" item="taskModule" separator=",">
             (
-            #{module.skillId},
-            #{module.moduleName},
-            #{module.objective},
+            #{taskModule.skillId},
+            #{taskModule.moduleName},
+            #{taskModule.objective},
             NOW(),
             NOW()
             )
         </foreach>
     </insert>
+
+    <select id="queryModulesBySkillId" parameterType="java.lang.Long" resultMap="ModuleMap">
+        select id, skill_id, module_name, objective
+        from taskModule
+        where skill_id = #{skillId}
+    </select>
 </mapper>

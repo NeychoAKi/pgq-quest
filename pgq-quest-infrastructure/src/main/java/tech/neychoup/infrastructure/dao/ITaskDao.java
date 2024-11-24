@@ -2,6 +2,7 @@ package tech.neychoup.infrastructure.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import tech.neychoup.domain.task.model.entity.Task;
 import tech.neychoup.infrastructure.dao.po.TaskPO;
 
 import java.util.List;
@@ -16,4 +17,7 @@ import java.util.List;
 public interface ITaskDao {
     void insertTaskList(@Param("tasks") List<TaskPO> tasks);
 
+    List<TaskPO> queryTasksByModuleId(Long id);
+
+    Task queryTaskById(Long taskId);
 }

@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import tech.neychoup.domain.task.adapter.port.ITaskPort;
-import tech.neychoup.domain.task.model.aggregate.Module;
+import tech.neychoup.domain.task.model.aggregate.TaskModule;
+import tech.neychoup.domain.task.model.aggregate.TaskCompletion;
 import tech.neychoup.domain.task.model.entity.Task;
 import tech.neychoup.infrastructure.gateway.IChatGLMApiService;
 import tech.neychoup.infrastructure.gateway.dto.AIAnswerDTO;
@@ -16,6 +17,7 @@ import tech.neychoup.infrastructure.gateway.dto.GLMCompletionRequestDTO;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,7 +39,7 @@ public class TaskPort implements ITaskPort {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<Module> generateLearningTasks(String skill) {
+    public List<TaskModule> generateLearningTasks(String skill) {
         try {
             // 1. 构建请求数据
             GLMCompletionRequestDTO requestDTO = new GLMCompletionRequestDTO();
@@ -70,7 +72,7 @@ public class TaskPort implements ITaskPort {
     }
 
     @Override
-    public Boolean verifyTaskFinished(Task task, String content) throws IOException {
+    public TaskCompletion verifyTaskFinished(Task task, String content) throws IOException {
         // TaskPO(id=null, skillId=null, taskName=优化合约性能, description=学习优化合约性能并减少Gas费用的技巧。, difficulty=4, tokenReward=400, experienceReward=350, assignment=优化一个已有的合约，并对比优化前后的Gas使用情况。)
         GLMCompletionRequestDTO requestDTO = new GLMCompletionRequestDTO();
         requestDTO.setModel(apiModel);
@@ -93,10 +95,15 @@ public class TaskPort implements ITaskPort {
 
         // 解析返回的 JSON 格式审核结果
         JsonNode resultNode = objectMapper.readTree(getCleanJson(answers.toString()));
-        int score = resultNode.get("score").asInt();
+        double score = resultNode.get("score").asDouble();
         String feedback = resultNode.get("feedback").asText();
 
-        return score >= 90;
+        TaskCompletion taskCompletion = new TaskCompletion();
+        taskCompletion.setScore(BigDecimal.valueOf(score));
+        taskCompletion.setIsCompletion(score >= 90);
+        taskCompletion.setFeedback(feedback);
+
+        return taskCompletion;
     }
 
     private List<Map<String, String>> buildRequestPayload(String skill) {
@@ -154,15 +161,15 @@ public class TaskPort implements ITaskPort {
         return messages;
     }
 
-    private List<Module> parseModules(String json) throws JsonProcessingException {
+    private List<TaskModule> parseModules(String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         String cleanJson = getCleanJson(json);
 
         JsonNode rootNode = mapper.readTree(cleanJson);
         JsonNode modulesNode = rootNode.get("modules");
-        List<Module> moduleList = mapper.convertValue(modulesNode, new TypeReference<List<Module>>() {
+        List<TaskModule> taskModuleList = mapper.convertValue(modulesNode, new TypeReference<List<TaskModule>>() {
         });
-        return moduleList;
+        return taskModuleList;
     }
 
     private String getCleanJson(String json) {

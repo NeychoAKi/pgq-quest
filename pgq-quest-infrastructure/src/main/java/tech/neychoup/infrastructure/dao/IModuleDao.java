@@ -18,4 +18,6 @@ public interface IModuleDao {
     void insertModule(ModulePO module);
 
     void insertModules(List<ModulePO> modulePOList);
+
+    List<ModulePO> queryModulesBySkillId(Long skillId);
 }

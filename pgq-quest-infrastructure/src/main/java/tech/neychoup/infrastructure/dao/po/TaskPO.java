@@ -50,6 +50,8 @@ public class TaskPO {
      */
     private String assignment;
 
+    private Boolean isCompleted;
+
     /**
      * 创建时间
      */
