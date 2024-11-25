@@ -3,18 +3,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>tech.neychoup</groupId>
-    <artifactId>pgq-quest</artifactId>
+    <artifactId>taskcraft-ai-task</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <taskModules>
-        <taskModule>pgq-quest-api</taskModule>
-        <taskModule>pgq-quest-app</taskModule>
-        <taskModule>pgq-quest-domain</taskModule>
-        <taskModule>pgq-quest-trigger</taskModule>
-        <taskModule>pgq-quest-infrastructure</taskModule>
-        <taskModule>pgq-quest-types</taskModule>
-    </taskModules>
+    <modules>
+        <module>taskcraft-ai-task-api</module>
+        <module>taskcraft-ai-task-app</module>
+        <module>taskcraft-ai-task-domain</module>
+        <module>taskcraft-ai-task-trigger</module>
+        <module>taskcraft-ai-task-infrastructure</module>
+        <module>taskcraft-ai-task-types</module>
+    </modules>
 
     <repositories>
         <repository>
@@ -40,10 +40,10 @@
 
     <developers>
         <developer>
-            <name>xiaofuge</name>
-            <email>184172133@qq.com</email>
-            <organization>fuzhengwei</organization>
-            <organizationUrl>https://github.com/fuzhengwei</organizationUrl>
+            <name>Neycho</name>
+            <email>neychoceng1011@gmail.com</email>
+            <organization>neycho</organization>
+            <organizationUrl>https://github.com/NeychoAKi</organizationUrl>
         </developer>
     </developers>
 
@@ -119,27 +119,27 @@
             <!-- 工程模块 -->
             <dependency>
                 <groupId>tech.neychoup</groupId>
-                <artifactId>pgq-quest-api</artifactId>
+                <artifactId>taskcraft-ai-task-api</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>tech.neychoup</groupId>
-                <artifactId>pgq-quest-domain</artifactId>
+                <artifactId>taskcraft-ai-task-domain</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>tech.neychoup</groupId>
-                <artifactId>pgq-quest-infrastructure</artifactId>
+                <artifactId>taskcraft-ai-task-infrastructure</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>tech.neychoup</groupId>
-                <artifactId>pgq-quest-types</artifactId>
+                <artifactId>taskcraft-ai-task-types</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>tech.neychoup</groupId>
-                <artifactId>pgq-quest-trigger</artifactId>
+                <artifactId>taskcraft-ai-task-trigger</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -201,21 +201,21 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <java_jvm>-Xms1G -Xmx1G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=test -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/pgq-quest-boot -Xloggc:/export/Logs/pgq-quest-boot/gc-pgq-quest-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
+                <java_jvm>-Xms1G -Xmx1G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=test -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/taskcraft-ai-task-boot -Xloggc:/export/Logs/taskcraft-ai-task-boot/gc-taskcraft-ai-task-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
                 <profileActive>dev</profileActive>
             </properties>
         </profile>
         <profile>
             <id>test</id>
             <properties>
-                <java_jvm>-Xms1G -Xmx1G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=test -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/pgq-quest-boot -Xloggc:/export/Logs/pgq-quest-boot/gc-pgq-quest-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
+                <java_jvm>-Xms1G -Xmx1G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=test -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/taskcraft-ai-task-boot -Xloggc:/export/Logs/taskcraft-ai-task-boot/gc-taskcraft-ai-task-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
                 <profileActive>test</profileActive>
             </properties>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
-                <java_jvm>-Xms6G -Xmx6G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=release -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/fq-mall-activity-app -Xloggc:/export/Logs/pgq-quest-boot/gc-pgq-quest-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
+                <java_jvm>-Xms6G -Xmx6G -server  -XX:MaxPermSize=256M -Xss256K -Dspring.profiles.active=release -XX:+DisableExplicitGC -XX:+UseG1GC  -XX:LargePageSizeInBytes=128m -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/Logs/fq-mall-activity-app -Xloggc:/export/Logs/taskcraft-ai-task-boot/gc-taskcraft-ai-task-boot.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps</java_jvm>
                 <profileActive>prod</profileActive>
             </properties>
         </profile>

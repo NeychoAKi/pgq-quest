@@ -42,4 +42,4 @@ build/
 
 data
 
-pgq-quest-app/src/main/resources/application-test.yml
+taskcraft-ai-task-app/src/main/resources/application-test.yml

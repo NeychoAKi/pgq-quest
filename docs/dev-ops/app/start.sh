@@ -1,5 +1,5 @@
-CONTAINER_NAME=pgq-quest
-IMAGE_NAME=system/pgq-quest:1.0-SNAPSHOT
+CONTAINER_NAME=taskcraft-ai-task
+IMAGE_NAME=system/taskcraft-ai-task:1.0-SNAPSHOT
 PORT=8091
 
 echo "容器部署开始 ${CONTAINER_NAME}"

@@ -1,0 +1,5 @@
+spring:
+  config:
+    name: taskcraft-ai-task-app
+  profiles:
+    active: test

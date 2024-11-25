@@ -1,1 +1,1 @@
-docker stop pgq-quest
+docker stop taskcraft-ai-task
