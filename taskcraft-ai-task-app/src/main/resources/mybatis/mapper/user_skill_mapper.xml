@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.neychoup.infrastructure.dao.IUserSkillDao">
+
+    <resultMap id="UserSkillMap" type="tech.neychoup.infrastructure.dao.po.UserSkillPO">
+        <id column="wallet_address" property="walletAddress"/>
+        <result column="skill_id" property="skillId"/>
+        <result column="level" property="level"/>
+        <result column="experience" property="experience"/>
+        <result column="progress" property="progress"/>
+        <result column="last_updated" property="lastUpdated"/>
+    </resultMap>
+    <insert id="saveUserSkill">
+        insert into user_skill (wallet_address, skill_id, level, experience, progress, last_updated)
+        values (#{walletAddress}, #{skillId}, #{level}, #{experience}, #{progress}, #{lastUpdated})
+    </insert>
+
+    <select id="getUserSkill" resultMap="UserSkillMap">
+        select *
+        from user_skill
+        where wallet_address = #{walletAddress}
+    </select>
+</mapper>

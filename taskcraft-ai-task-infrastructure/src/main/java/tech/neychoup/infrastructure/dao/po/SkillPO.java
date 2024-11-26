@@ -1,21 +1,17 @@
-package tech.neychoup.domain.skill.model.entity;
+package tech.neychoup.infrastructure.dao.po;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @author Neycho
  * @version 1.0
  * @date 2024-11-26
- * @description 技能实体对象
+ * @description
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Skill {
+public class SkillPO {
 
     /**
      * 技能ID
@@ -31,4 +27,14 @@ public class Skill {
      * 技能描述
      */
     private String description;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }

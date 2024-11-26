@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.neychoup.infrastructure.dao.ISkillDao">
+
+    <resultMap id="SkillMap" type="tech.neychoup.infrastructure.dao.po.SkillPO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveSkill" parameterType="tech.neychoup.infrastructure.dao.po.SkillPO" keyProperty="id" useGeneratedKeys="true">
+        insert into skill (name,
+                           description,
+                           create_time,
+                           update_time)
+        values (#{name}, #{description}, now(), now())
+    </insert>
+
+    <select id="getSkillById" resultMap="SkillMap">
+        select * from skill where id = #{skillId}
+    </select>
+
+
+</mapper>

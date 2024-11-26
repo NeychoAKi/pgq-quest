@@ -38,7 +38,7 @@ public class Module {
     /**
      * 是否被锁
      */
-    private boolean isLocked;
+    private Boolean isLocked;
 
     /**
      * 解锁所需花费

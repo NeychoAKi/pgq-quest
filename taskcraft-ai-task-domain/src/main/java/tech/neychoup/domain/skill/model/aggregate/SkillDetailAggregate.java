@@ -21,8 +21,10 @@ import java.util.List;
 @NoArgsConstructor
 public class SkillDetailAggregate {
 
+    private String walletAddress;
+
     /**
-     *
+     * 技能
      */
     private Skill skill;
 

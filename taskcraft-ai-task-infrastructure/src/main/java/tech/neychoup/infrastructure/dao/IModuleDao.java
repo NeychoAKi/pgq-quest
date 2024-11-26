@@ -15,9 +15,9 @@ import java.util.List;
 @Mapper
 public interface IModuleDao {
 
-    void insertModule(ModulePO module);
-
-    void insertModules(List<ModulePO> modulePOList);
+    void saveModuleList(List<ModulePO> modulePOList);
 
     List<ModulePO> queryModulesBySkillId(Long skillId);
+
+    void saveModule(ModulePO modulePO);
 }

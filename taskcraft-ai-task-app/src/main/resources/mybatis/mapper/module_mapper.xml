@@ -13,7 +13,7 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <insert id="insertModule" parameterType="tech.neychoup.infrastructure.dao.po.ModulePO">
+    <insert id="saveModule" parameterType="tech.neychoup.infrastructure.dao.po.ModulePO" useGeneratedKeys="true" keyProperty="id">
         insert into module (skill_id,
                             module_name,
                             objective,
@@ -22,11 +22,13 @@
         values (#{skillId}, #{moduleName}, #{objective}, now(), now())
     </insert>
 
-    <insert id="insertModules" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveModuleList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO module (
         skill_id,
         module_name,
         objective,
+        is_locked,
+        unlock_cost,
         create_time,
         update_time
         ) VALUES
@@ -35,6 +37,8 @@
             #{taskModule.skillId},
             #{taskModule.moduleName},
             #{taskModule.objective},
+            #{taskModule.isLocked},
+            #{taskModule.unlockCost},
             NOW(),
             NOW()
             )

@@ -20,12 +20,13 @@
 
     <insert id="insertTaskList" parameterType="java.util.List">
         INSERT INTO task (
-            module_id, task_name, description, difficulty, token_reward, experience_reward,
+            module_id, skill_id, task_name, description, difficulty, token_reward, experience_reward,
             assignment, is_completed, create_time, update_time
         ) values
         <foreach collection="tasks" item="task" separator=",">
             (
                 #{task.moduleId},
+                #{task.skillId},
                 #{task.taskName},
                 #{task.description},
                 #{task.difficulty},

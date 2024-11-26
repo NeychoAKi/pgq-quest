@@ -35,7 +35,7 @@ public class TaskPO {
     /**
      * 任务难度
      */
-    private Long difficulty;
+    private Integer difficulty;
 
     /**
      * 代币奖励

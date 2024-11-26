@@ -1,6 +1,9 @@
 package tech.neychoup.domain.skill.service;
 
 import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
+import tech.neychoup.domain.skill.model.entity.Skill;
+
+import java.util.List;
 
 /**
  * @author Neycho
@@ -23,4 +26,5 @@ public interface ISkillService {
      * @return
      */
     SkillDetailAggregate getSkillDetail(Long skillId);
+
 }

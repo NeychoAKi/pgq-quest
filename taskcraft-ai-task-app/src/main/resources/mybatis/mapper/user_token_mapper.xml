@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tech.neychoup.infrastructure.dao.IUserTokenDao">
+
+    <resultMap id="UserTokenMap" type="tech.neychoup.infrastructure.dao.po.UserTokenPO">
+        <id column="wallet_address" property="walletAddress"/>
+        <result column="token_symbol" property="tokenSymbol"/>
+        <result column="balance" property="balance"/>
+        <result column="blockchain" property="blockchain"/>
+        <result column="last_updated" property="lastUpdated"/>
+    </resultMap>
+
+    <select id="getUserToken" resultMap="UserTokenMap">
+        select *
+        from user_token
+        where wallet_address = #{walletAddress}
+    </select>
+
+</mapper>

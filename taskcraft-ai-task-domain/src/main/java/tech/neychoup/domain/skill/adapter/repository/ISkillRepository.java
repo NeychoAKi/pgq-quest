@@ -1,6 +1,9 @@
 package tech.neychoup.domain.skill.adapter.repository;
 
 import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
+import tech.neychoup.domain.skill.model.entity.Skill;
+
+import java.util.List;
 
 /**
  * @author Neycho
@@ -11,6 +14,4 @@ import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
 public interface ISkillRepository {
 
     void saveSkillTask(SkillDetailAggregate skillDetailAggregate);
-
-    SkillDetailAggregate querySkillDetailBySkillId(Long skillId);
 }
