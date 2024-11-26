@@ -16,19 +16,49 @@ import java.io.Serializable;
 @ToString
 public class Task implements Serializable {
 
+    /**
+     * 任务ID
+     */
     private Long id;
 
+    /**
+     * 技能ID
+     */
     private Long skillId;
+
+    /**
+     * 任务名称
+     */
     @JsonProperty("taskName")
     private String taskName;
+
+    /**
+     * 任务描述
+     */
     @JsonProperty("description")
     private String description;
+
+    /**
+     * 任务难度
+     */
     @JsonProperty("difficulty")
-    private Long difficulty;
+    private Integer difficulty;
+
+    /**
+     * 代币奖励
+     */
     @JsonProperty("tokenReward")
     private Long tokenReward;
+
+    /**
+     * 经验值奖励
+     */
     @JsonProperty("experienceReward")
     private Long experienceReward;
+
+    /**
+     * 作业
+     */
     @JsonProperty("assignment")
     private String assignment;
 }

@@ -7,12 +7,14 @@
         <result column="skill_id" property="skillId"/>
         <result column="module_name" property="moduleName"/>
         <result column="objective" property="objective"/>
+        <result column="is_locked" property="isLocked"/>
+        <result column="unlock_cost" property="unlockCost"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <insert id="insertModule" parameterType="tech.neychoup.infrastructure.dao.po.ModulePO">
-        insert into taskModule (skill_id,
+        insert into module (skill_id,
                             module_name,
                             objective,
                             create_time,
@@ -21,7 +23,7 @@
     </insert>
 
     <insert id="insertModules" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO taskModule (
+        INSERT INTO module (
         skill_id,
         module_name,
         objective,
@@ -40,8 +42,8 @@
     </insert>
 
     <select id="queryModulesBySkillId" parameterType="java.lang.Long" resultMap="ModuleMap">
-        select id, skill_id, module_name, objective
-        from taskModule
+        select id, skill_id, module_name, objective, is_locked, unlock_cost
+        from module
         where skill_id = #{skillId}
     </select>
 </mapper>

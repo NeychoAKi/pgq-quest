@@ -31,11 +31,38 @@
     </repositories>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- MyBatis Spring Boot Starter -->
+        <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
+        <!-- MySQL Connector/J -->
+        <mysql.version>8.0.33</mysql.version>
+        <!-- FastJSON -->
+        <fastjson.version>2.0.28</fastjson.version>
+        <!-- Apache Commons Lang -->
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <!-- Google Guava -->
+        <guava.version>32.1.3-jre</guava.version>
+        <!-- dom4j -->
+        <dom4j.version>2.1.4</dom4j.version>
+        <!-- XStream -->
+        <xstream.version>1.4.20</xstream.version>
+        <!-- JJWT -->
+        <jjwt.version>0.11.5</jjwt.version>
+        <!-- Java JWT -->
+        <java-jwt.version>4.4.0</java-jwt.version>
+        <!-- Apache Commons Codec -->
+        <commons-codec.version>1.15</commons-codec.version>
+        <!-- Redisson Spring Boot Starter -->
+        <redisson-spring-boot-starter.version>3.23.5</redisson-spring-boot-starter.version>
+        <!-- Retrofit -->
+        <retrofit.version>2.9.0</retrofit.version>
+        <!-- LangChain4j BOM -->
+        <langchain4j.version>0.36.2</langchain4j.version>
+        <httpclient.version>4.5.14</httpclient.version>
+        <httpmime.version>4.5.14</httpmime.version>
     </properties>
 
     <developers>
@@ -57,7 +84,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.12</version>
+        <version>3.3.6</version>
     </parent>
 
     <dependencyManagement>
@@ -65,7 +92,7 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>2.1.4</version>
+                <version>${mybatis-spring-boot-starter.version}</version>
             </dependency>
             <!-- # 多数据源路由配置
                  # mysql 5.x driver-class-name: com.mysql.jdbc.Driver    mysql-connector-java 5.1.34
@@ -73,7 +100,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.22</version>
+                <version>${mysql.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -162,7 +189,24 @@
                 <artifactId>adapter-rxjava2</artifactId>
                 <version>2.9.0</version>
             </dependency>
-
+            <!-- LangChain4j -->
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-bom</artifactId>
+                <version>0.36.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpmime.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -171,25 +215,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <version>2.7</version>
             </plugin>
         </plugins>
     </build>

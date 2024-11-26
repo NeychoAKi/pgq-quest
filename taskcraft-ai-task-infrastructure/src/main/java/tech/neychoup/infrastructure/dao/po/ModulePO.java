@@ -31,6 +31,16 @@ public class ModulePO {
     private String objective;
 
     /**
+     * 是否被锁
+     */
+    private Boolean isLocked;
+
+    /**
+     * 解锁所需花费
+     */
+    private Integer unlockCost;
+
+    /**
      * 创建时间
      */
     private Date createTime;

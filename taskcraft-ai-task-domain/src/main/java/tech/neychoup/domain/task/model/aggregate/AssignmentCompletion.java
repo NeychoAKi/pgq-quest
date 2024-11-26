@@ -11,12 +11,12 @@ import java.math.BigDecimal;
  * @description 任务完成情况
  */
 @Data
-public class TaskCompletion {
+public class AssignmentCompletion {
 
     /**
-     *
+     * 任务Id
      */
-    private Boolean completed;
+    private Long taskId;
 
     /**
      * 任务反馈
@@ -24,8 +24,12 @@ public class TaskCompletion {
     private String feedback;
 
     /**
-     *
+     * 作业乘积
      */
     private BigDecimal score;
 
+    /**
+     * 是否完成
+     */
+    private Boolean completed;
 }
