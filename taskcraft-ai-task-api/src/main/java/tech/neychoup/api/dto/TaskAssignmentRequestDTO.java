@@ -12,6 +12,11 @@ import lombok.Data;
 public class TaskAssignmentRequestDTO {
 
     /**
+     * 钱包地址
+     */
+    private String walletAddress;
+
+    /**
      * 任务ID
      */
     private Long taskId;
@@ -25,5 +30,5 @@ public class TaskAssignmentRequestDTO {
     /**
      * 图片
      */
-    private String imageUrl;
+    private String imgUrl;
 }

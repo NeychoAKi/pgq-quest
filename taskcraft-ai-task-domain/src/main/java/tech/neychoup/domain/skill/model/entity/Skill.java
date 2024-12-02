@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author Neycho
  * @version 1.0
@@ -23,6 +25,11 @@ public class Skill {
     private Long id;
 
     /**
+     * 钱包地址
+     */
+    private String walletAddress;
+
+    /**
      * 技能名称
      */
     private String name;
@@ -31,4 +38,9 @@ public class Skill {
      * 技能描述
      */
     private String description;
+
+    /**
+     * 技能下的模块列表
+     */
+    private List<Module> moduleList;
 }

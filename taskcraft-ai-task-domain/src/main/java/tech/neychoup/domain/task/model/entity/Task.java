@@ -1,6 +1,6 @@
 package tech.neychoup.domain.task.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @description
  */
 @Data
+@Builder
 @ToString
 public class Task implements Serializable {
 
@@ -22,43 +23,57 @@ public class Task implements Serializable {
     private Long id;
 
     /**
-     * 技能ID
-     */
-    private Long skillId;
-
-    /**
      * 任务名称
      */
-    @JsonProperty("taskName")
-    private String taskName;
+    private String name;
 
     /**
      * 任务描述
      */
-    @JsonProperty("description")
     private String description;
 
     /**
      * 任务难度
      */
-    @JsonProperty("difficulty")
     private Integer difficulty;
 
     /**
      * 代币奖励
      */
-    @JsonProperty("tokenReward")
-    private Long tokenReward;
+    private Double tokenReward;
 
     /**
      * 经验值奖励
      */
-    @JsonProperty("experienceReward")
-    private Long experienceReward;
+    private Integer experienceReward;
 
     /**
      * 作业
      */
-    @JsonProperty("assignment")
     private String assignment;
+
+    /**
+     * 是否完成
+     */
+    private Boolean completed;
+
+    /**
+     * 是否失败
+     */
+    private Boolean failed;
+
+    /**
+     * 作业内容
+     */
+    private String textContent;
+
+    /**
+     * 作业成绩
+     */
+    private Integer score;
+
+    /**
+     * 任务反馈
+     */
+    private String feedback;
 }

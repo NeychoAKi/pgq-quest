@@ -2,10 +2,82 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tech.neychoup.infrastructure.dao.ITaskCompletionDao">
 
-    <resultMap id="TaskMap" type="tech.neychoup.infrastructure.dao.po.TaskCompletionPO">
+    <resultMap id="TaskCompletionMap" type="tech.neychoup.infrastructure.dao.po.TaskCompletionPO">
         <id column="id" property="id"/>
+        <result column="id" property="id"/>
+        <result column="task_id" property="taskId"/>
+        <result column="wallet_address" property="walletAddress"/>
+        <result column="text_content" property="textContent"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="feedback" property="feedback"/>
+        <result column="score" property="score"/>
+        <result column="completed" property="completed"/>
+        <result column="failed" property="failed"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
+
+    <insert id="saveTaskCompletion" parameterType="tech.neychoup.infrastructure.dao.po.TaskCompletionPO">
+        INSERT INTO task_completion (
+            task_id, wallet_address, text_content, image_url, feedback, score, completed, failed, create_time, update_time
+        )
+        VALUES (
+                   #{taskId},
+                   #{walletAddress},
+                   #{textContent},
+                   #{imageUrl},
+                   #{feedback},
+                   #{score},
+                   #{completed},
+                   #{failed},
+                   NOW(),
+                   NOW()
+               )
+    </insert>
+
+    <update id="updateTaskCompletion">
+        UPDATE task_completion
+        <set>
+            <if test="textContent!= null">
+                text_content = #{textContent},
+            </if>
+            <if test="completed != null">
+                completed = #{completed},
+            </if>
+            <if test="failed != null">
+                failed = #{failed},
+            </if>
+            <if test="score != null">
+                score = #{score},
+            </if>
+            <if test="feedback != null">
+                feedback = #{feedback},
+            </if>
+        </set>
+        WHERE wallet_address = #{walletAddress}
+        AND task_id = #{taskId}
+    </update>
+
+
+    <select id="queryTaskCompletionById" resultMap="TaskCompletionMap">
+        select *
+        from task_completion
+        where wallet_address = #{walletAddress}
+          and task_id = #{taskId}
+    </select>
+
+    <select id="queryCompletionsByTaskIds" resultMap="TaskCompletionMap">
+        SELECT
+        tc.*
+        FROM
+        task_completion AS tc
+        WHERE
+        tc.wallet_address = #{walletAddress}
+        AND tc.task_id IN
+        <foreach item="taskId" collection="taskIds" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </select>
+
 
 </mapper>

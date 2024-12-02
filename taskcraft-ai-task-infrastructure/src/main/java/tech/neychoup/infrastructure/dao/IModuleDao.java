@@ -17,7 +17,8 @@ public interface IModuleDao {
 
     void saveModuleList(List<ModulePO> modulePOList);
 
-    List<ModulePO> queryModulesBySkillId(Long skillId);
+    List<ModulePO> getModuleListBySkillId(Long skillId);
 
     void saveModule(ModulePO modulePO);
+
 }

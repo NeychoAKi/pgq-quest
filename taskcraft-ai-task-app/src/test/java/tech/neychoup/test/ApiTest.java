@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import tech.neychoup.domain.task.adapter.port.ITaskPort;
-import tech.neychoup.domain.task.model.aggregate.AssignmentCompletion;
 import tech.neychoup.domain.task.model.entity.Task;
-
-import java.io.IOException;
+import tech.neychoup.domain.task.model.entity.TaskCompletion;
+import tech.neychoup.domain.task.model.valobj.TaskCompletionVO;
+import tech.neychoup.domain.task.service.ITaskService;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -42,17 +42,11 @@ public class ApiTest {
         System.out.println(res);
     }
 
+    @Autowired
+    private ITaskService taskService;
+
     @Test
     public void test_taskPort_verify_Tasks() {
-        // 模拟任务
-        Task task = new Task();
-        task.setId(1L);
-        task.setTaskName("优化合约性能");
-        task.setDescription("学习优化合约性能并减少Gas费用的技巧。");
-        // task.setDifficulty(4L);
-        task.setTokenReward(400L);
-        task.setExperienceReward(350L);
-        task.setAssignment("优化一个已有的合约，并对比优化前后的Gas使用情况。");
 
         // 作业答案
         String content = "原合约代码:\n" +
@@ -97,15 +91,16 @@ public class ApiTest {
                 "                    1. 原合约的 `calculateSum` 函数在每次调用时，需要遍历整个数组，消耗 O(n) 的 Gas。\n" +
                 "                    2. 优化后，`calculateSum` 直接返回缓存的 `totalSum`，Gas 消耗为 O(1)。\n" +
                 "                    3. 测试对比显示，优化后的 `calculateSum` 函数的 Gas 消耗减少了约 80%。";
-        AssignmentCompletion assignmentCompletion;
-        try {
-            assignmentCompletion = taskPort.verifyTaskFinished(task, content);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        TaskCompletionVO taskCompletionVO = new TaskCompletionVO();
+        taskCompletionVO.setTaskId(13L);
+        taskCompletionVO.setWalletAddress("0x1234567890abcdef");
+        taskCompletionVO.setImgUrl("...");
+        taskCompletionVO.setTextContent(content);
+
+        TaskCompletion completion = taskService.verifyTaskAssignment(taskCompletionVO);
 
         // 输出验证结果
-        log.info("是否完成任务：{}", assignmentCompletion);
+        log.info("是否完成任务：{}", completion);
     }
 }

@@ -31,12 +31,12 @@ public class Module {
     private String name;
 
     /**
-     * 目标
+     * 模块目标
      */
     private String objective;
 
     /**
-     * 是否被锁
+     * 是否被锁定
      */
     private Boolean isLocked;
 
@@ -46,7 +46,7 @@ public class Module {
     private Integer unlockCost;
 
     /**
-     * 任务列表
+     * 模块下的任务列表
      */
-    private List<Task> tasks;
+    private List<Task> taskList;
 }

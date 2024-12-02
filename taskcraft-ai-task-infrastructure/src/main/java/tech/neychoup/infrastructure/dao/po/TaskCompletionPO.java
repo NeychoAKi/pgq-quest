@@ -1,5 +1,6 @@
 package tech.neychoup.infrastructure.dao.po;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @description 任务完成情况PO
  */
 @Data
+@Builder
 public class TaskCompletionPO {
     /**
      * 任务完成记录ID
@@ -26,7 +28,7 @@ public class TaskCompletionPO {
     /**
      * 用户ID
      */
-    private Long userId;
+    private String walletAddress;
 
     /**
      * 用户提交的文字内容
@@ -46,12 +48,17 @@ public class TaskCompletionPO {
     /**
      * 任务完成分数
      */
-    private BigDecimal score;
+    private Integer score;
 
     /**
      * 是否完成
      */
-    private Boolean isCompletion;
+    private Boolean completed;
+
+    /**
+     * 是否失败
+     */
+    private Boolean failed;
 
     /**
      * 创建时间

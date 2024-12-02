@@ -1,5 +1,6 @@
 package tech.neychoup.infrastructure.dao.po;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @description 任务模块
  */
 @Data
+@Builder
 public class ModulePO {
 
     private Long id;
@@ -23,7 +25,7 @@ public class ModulePO {
     /**
      * 模块名称
      */
-    private String moduleName;
+    private String name;
 
     /**
      * 模块目标

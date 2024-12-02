@@ -27,4 +27,6 @@ public interface ISkillDao {
      * @return
      */
     SkillPO getSkillById(Long skillId);
+
+    List<Skill> getSkillListByUserAddress(String walletAddress);
 }

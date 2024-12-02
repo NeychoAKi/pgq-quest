@@ -15,9 +15,21 @@ public class Constants {
         SUCCESS("0000", "调用成功"),
         UN_ERROR("0001", "调用失败"),
         ILLEGAL_PARAMETER("0002", "非法参数"),
-        NO_LOGIN("0003", "未登录");
+        NO_LOGIN("0003", "未登录"),
+        NOT_FOUND("0004", "未找到数据");
 
         private String code;
         private String info;
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public enum SkillInitInfo {
+        INIT_LEVEL(1),
+        INIT_EXPERIENCE(0),
+        INIT_PROGRESS(0);
+
+        private Integer value;
     }
 }

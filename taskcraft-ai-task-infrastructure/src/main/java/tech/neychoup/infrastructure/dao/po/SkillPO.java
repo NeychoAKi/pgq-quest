@@ -1,5 +1,6 @@
 package tech.neychoup.infrastructure.dao.po;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,12 +12,18 @@ import java.util.Date;
  * @description
  */
 @Data
+@Builder
 public class SkillPO {
 
     /**
      * 技能ID
      */
     private Long id;
+
+    /**
+     * 用户地址
+     */
+    private String walletAddress;
 
     /**
      * 技能名称

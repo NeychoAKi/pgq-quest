@@ -1,32 +1,29 @@
-package tech.neychoup.api.dto;
+package tech.neychoup.domain.task.model.entity;
 
-import lombok.Builder;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * @author Neycho
  * @version 1.0
- * @date 2024-11-24
- * @description 任务完成情况响应DTO
+ * @date 2024-11-28
+ * @description
  */
 @Data
-@Builder
-public class TaskAssignmentResponseDTO {
+public class TaskCompletion {
 
     /**
-     * 任务Id
+     * 提交内容（文本内容、图片内容）
      */
-    private Long taskId;
+    private String text_content;
+    private String image_url;
 
     /**
-     * 任务提交反馈
+     * 任务反馈
      */
     private String feedback;
 
     /**
-     * 任务完成分数
+     * 作业分数
      */
     private Integer score;
 
@@ -39,4 +36,5 @@ public class TaskAssignmentResponseDTO {
      * 是否失败
      */
     private Boolean failed;
+
 }

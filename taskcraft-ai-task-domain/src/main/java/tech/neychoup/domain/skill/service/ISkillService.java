@@ -1,6 +1,5 @@
 package tech.neychoup.domain.skill.service;
 
-import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
 import tech.neychoup.domain.skill.model.entity.Skill;
 
 import java.util.List;
@@ -15,16 +14,25 @@ public interface ISkillService {
 
     /**
      * 根据技能名称生成任务
-     * @param skillName
+     *
+     * @param skillTopic 技能主题
      * @return
      */
-    SkillDetailAggregate generateTask(String skillName);
+    Skill generateSkill(String walletAddress, String skillTopic);
 
     /**
-     * 根据技能ID查询任务详情
-     * @param skillId
+     * 根据技能ID查询技能
+     * @param walletAddress
+     * @param id
      * @return
      */
-    SkillDetailAggregate getSkillDetail(Long skillId);
+    Skill getSkillById(String walletAddress, Long id);
 
+    /**
+     * 获得用户所有技能
+     *
+     * @param walletAddress
+     * @return
+     */
+    List<Skill> getSkillListByUserAddress(String walletAddress);
 }

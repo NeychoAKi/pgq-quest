@@ -6,7 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
+
+import tech.neychoup.domain.skill.model.aggregate.UserSkillAggregate;
 import tech.neychoup.domain.skill.service.impl.SkillService;
 import tech.neychoup.domain.user.adapter.repository.IUserRepository;
 import tech.neychoup.domain.user.model.aggregate.UserInfo;
@@ -25,10 +26,12 @@ public class ServiceTest {
     @Autowired
     private SkillService skillService;
 
+    private String userAddress = "0x9709206880c0DB1ae9ab9b32d0d8D685217E200b";
+
     @Test
     public void test() {
-        SkillDetailAggregate skillDetailAggregate = skillService.generateTask("公考");
-        log.info(skillDetailAggregate.toString());
+        // UserSkillAggregate userSkill = skillService.generateTask(userAddress, "公考");
+        // log.info(userSkill.toString());
     }
 
     @Autowired
@@ -36,7 +39,7 @@ public class ServiceTest {
 
     @Test
     public void test_getUserInfo() {
-        UserInfo userInfo = userRepository.getUserInfo("0x9709206880c0DB1ae9ab9b32d0d8D685217E200b");
+        UserInfo userInfo = userRepository.getUserInfo(userAddress);
         log.info(userInfo.toString());
     }
 }

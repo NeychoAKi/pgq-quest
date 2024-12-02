@@ -1,16 +1,15 @@
 package tech.neychoup.domain.skill.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.neychoup.domain.skill.model.entity.Skill;
 import tech.neychoup.domain.task.adapter.port.ITaskPort;
 import tech.neychoup.domain.skill.adapter.repository.ISkillRepository;
-import tech.neychoup.domain.skill.model.aggregate.SkillDetailAggregate;
 import tech.neychoup.domain.skill.service.ISkillService;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 
 /**
@@ -21,48 +20,51 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SkillService implements ISkillService {
 
-    @Autowired
-    private ISkillRepository skillRepository;
+    private final ISkillRepository skillRepository;
 
-    @Autowired
-    private ITaskPort taskPort;
+    private final ITaskPort taskPort;
 
     @Override
-    public SkillDetailAggregate generateTask(String skillName) {
+    public Skill generateSkill(String walletAddress, String skillTopic) {
+
         // 1. 调用AI生成模块和任务
-        SkillDetailAggregate skillDetailAggregate = taskPort.generateLearningTasks(skillName);
-        skillDetailAggregate.getSkill().setName(skillName);
+        Skill skill = generateSkillFromAI(skillTopic);
+        log.info("Generated skill successfully: {}", skill);
 
-        // 2. 异步存储生成结果
-        saveSkillTaskAsync(skillDetailAggregate);
+        // 设置用户技能参数(避免生成的技能名称与技能主题不同)
+        skill.setName(skillTopic);
+        skill.setWalletAddress(walletAddress);
 
-        return skillDetailAggregate;
+        // 2. 存储（需要ID => 同步）
+        skillRepository.saveSkill(skill);
+        log.info("Skill saved successfully!");
+
+        return skill;
     }
 
     /**
-     * 异步保存 Skill 和相关任务和任务模块
-     * @param skillDetailAggregate
+     * 调用AI生成技能（包括模块、任务）
+     *
+     * @param skillTopic
+     * @return
      */
-    private void saveSkillTaskAsync(SkillDetailAggregate skillDetailAggregate) {
-        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            executor.submit(() -> {
-                try {
-                    skillRepository.saveSkillTask(skillDetailAggregate);
-                } catch (RuntimeException e) {
-                    log.error("Failed to save skill task", e.getMessage());
-                    e.printStackTrace();
-                }
-            });
-        } catch (Exception e) {
-            // 捕获线程池创建或提交任务的异常
-            throw new RuntimeException("Failed to execute saveSkillTaskAsync", e);
-        }
+    private Skill generateSkillFromAI(String skillTopic) {
+        log.info("Generated skill for topic: {}", skillTopic);
+        return taskPort.generateSkillTask(skillTopic);
     }
 
     @Override
-    public SkillDetailAggregate getSkillDetail(Long skillId) {
-        return skillRepository.querySkillDetailBySkillId(skillId);
+    public Skill getSkillById(String walletAddress, Long id) {
+        log.info("Get skill by id: {}", id);
+        return skillRepository.getSkillById(walletAddress, id);
+    }
+
+    @Override
+    public List<Skill> getSkillListByUserAddress(String walletAddress) {
+        log.info("Get skills by user address: {}", walletAddress);
+        return skillRepository.getSkillListByUserAddress(walletAddress);
     }
 }

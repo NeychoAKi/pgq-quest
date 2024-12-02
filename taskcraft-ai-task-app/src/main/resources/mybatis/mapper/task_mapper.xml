@@ -5,14 +5,12 @@
     <resultMap id="TaskMap" type="tech.neychoup.infrastructure.dao.po.TaskPO">
         <id column="id" property="id"/>
         <result column="module_id" property="moduleId"/>
-        <result column="skill_id" property="skillId"/>
-        <result column="task_name" property="taskName"/>
+        <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="difficulty" property="difficulty"/>
         <result column="token_reward" property="tokenReward"/>
         <result column="experience_reward" property="experienceReward"/>
         <result column="assignment" property="assignment"/>
-        <result column="is_completed" property="isCompleted"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
@@ -20,20 +18,18 @@
 
     <insert id="insertTaskList" parameterType="java.util.List">
         INSERT INTO task (
-            module_id, skill_id, task_name, description, difficulty, token_reward, experience_reward,
-            assignment, is_completed, create_time, update_time
+            module_id, name, description, difficulty, token_reward, experience_reward,
+            assignment, create_time, update_time
         ) values
         <foreach collection="tasks" item="task" separator=",">
             (
                 #{task.moduleId},
-                #{task.skillId},
-                #{task.taskName},
+                #{task.name},
                 #{task.description},
                 #{task.difficulty},
                 #{task.tokenReward},
                 #{task.experienceReward},
                 #{task.assignment},
-                0,
                 now(),
                 now()
              )

@@ -1,5 +1,6 @@
 package tech.neychoup.infrastructure.dao.po;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,11 +12,10 @@ import java.util.Date;
  * @description 任务
  */
 @Data
+@Builder
 public class TaskPO {
 
     private Long id;
-
-    private Long skillId;
 
     /**
      * 归属模块
@@ -25,7 +25,7 @@ public class TaskPO {
     /**
      * 任务名称
      */
-    private String taskName;
+    private String name;
 
     /**
      * 任务描述
@@ -40,19 +40,17 @@ public class TaskPO {
     /**
      * 代币奖励
      */
-    private Long tokenReward;
+    private Double tokenReward;
 
     /**
      * 经验奖励
      */
-    private Long experienceReward;
+    private Integer experienceReward;
 
     /**
      * 任务作业
      */
     private String assignment;
-
-    private Boolean isCompleted;
 
     /**
      * 创建时间
